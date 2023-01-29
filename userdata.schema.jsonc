@@ -36,7 +36,12 @@
                                         "description": "Description for this time slow"
                                     }
                                 },
-                                "additionalProperties": false
+                                "additionalProperties": false,
+                                "required": [
+                                    "from",
+                                    "to",
+                                    "description"
+                                ]
                             }
                         }
                     }

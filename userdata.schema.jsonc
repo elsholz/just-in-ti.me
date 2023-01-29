@@ -1,0 +1,76 @@
+// Schema for Mongo DB collection `userdata` in database `just-in-time`.
+{
+    "$jsonSchema": {
+        "bsonType": "object",
+        "description": "Collection to save work hours for a user",
+        "properties": {
+            "_id": {
+                "type": "string",
+                "description": "ID of the user whose work hours are saved in this document"
+            },
+            "hours": {
+                "description": "First Layer: Year",
+                "type": "object",
+                "additionalProperties": {
+                    "description": "Second Layer: Month",
+                    "type": "object",
+                    "additionalProperties": {
+                        "description": "Third Layer: Day",
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "array",
+                            "description": "List of time slots for this day",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "from": {
+                                        "bsonType": "int",
+                                        "description": "Timestamp in seconds when time slot starts"
+                                    },
+                                    "to": {
+                                        "bsonType": "int",
+                                        "description": "Timestamp in seconds when time slot ends"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "description": "Description for this time slow"
+                                    }
+                                },
+                                "additionalProperties": false
+                            }
+                        }
+                    }
+                }
+            },
+            "layout": {
+                "type": "object",
+                "properties": {
+                    "interval": {
+                        "bsonType": "int",
+                        "description": "Interval in minutes in which start and end times can be moved",
+                        "enum": [
+                            15 // currently only 15 minute intervals are allowed
+                        ]
+                    },
+                    "theme": {
+                        "type": "string",
+                        "description": "Color Theme"
+                    },
+                    "from": {
+                        "bsonType": "int",
+                        "description": ""
+                    },
+                    "to": {
+                        "bsonType": "int",
+                        "description": ""
+                    }
+                },
+                "additionalProperties": false
+            }
+        },
+        "required": [
+            "hours"
+        ],
+        "additionalProperties": false
+    }
+}

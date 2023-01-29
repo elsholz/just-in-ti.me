@@ -42,15 +42,22 @@ _dataRoutes.patch("/api/_userdata", async (req, res) => {
     if (userAuthId) {
         const data = new patchUserData(req.body)
         const error = data.validateSync()
+        console.log("Data: ", data, req.body)
 
         if (error) {
             console.log('error validating! ', error)
+        } else if (!data.year || !data.month || !data.day || !data.hours) {
+            console.log("Something undefined!")
         } else {
-            let updateRes = await userData.updateOne({
+            console.log('Updating record')
+            console.log("hours." + data.year + '.' + data.month + '.' + data.day, data.hours)
+
+            let updateRes = await UserData.updateOne({
                 _id: userAuthId,
             }, {
-                $set: { ["hours." + data.year + '.' + data.week]: data.hours },
+                $set: { ["hours." + data.year + '.' + data.month + '.' + data.day]: data.hours },
             })
+            console.log(updateRes)
         }
     } else HTTP400(res)
 })

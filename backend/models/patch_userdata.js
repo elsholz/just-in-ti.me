@@ -6,10 +6,10 @@ const Schema = mongoose.Schema;
 
 const hoursSchema = new Schema({
     from: {
-        type: Schema.Types.Number,
+        type: Number,
     },
     to: {
-        type: Schema.Types.Number,
+        type: Number,
     },
     description: {
         type: String,
@@ -18,7 +18,7 @@ const hoursSchema = new Schema({
             return re.test(v)
         }
     },
-})
+}, { _id: undefined })
 
 const patchUserDataSchema = new Schema({
     year: {

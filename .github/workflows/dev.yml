@@ -15,6 +15,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-central-1
       # sam build
+      - run: pwd
+      - run: ls /home/runner/work/
       - run: ls -la
       - run: ls -la *
       - run: sam build --use-container

@@ -16,9 +16,8 @@ jobs:
           aws-region: eu-central-1
       # sam build
       - run: pwd
-      - run: ls /home/runner/work/
-      - run: ls -la
-      - run: ls -la *
+      - run: cd lambda
+      - run: pwd
       - run: sam build --use-container
 
       # Run Unit tests- Specify unit tests here

@@ -1,9 +1,4 @@
 requests
 jsonschema
 boto3
-
-flask
-python-dotenv
-python-jose
-flask-cors
-six
+auth0-python

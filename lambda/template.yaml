@@ -9,21 +9,24 @@ Globals:
     MemorySize: 128
 
 Resources:
-  # JITAuthorizerFunction:
-  #   Type: AWS::Serverless::Function
-  #   Properties:
-  #     CodeUri: ./authorizer
-  #     Handler: auth.lambda_handler
-  #     Runtime: python3.9
   JITAPI:
-    Type: AWS::Serverless::Api
+    Type: AWS::Serverless::HttpApi
     Properties:
-      StageName: Dev
-      # Auth:
-      #   DefaultAuthorizer: Auth
-      #   Authorizers:
-      #     Auth:
-      #       FunctionArn: !GetAtt JITAuthorizerFunction.Arn
+      StageName: dev
+      DefinitionBody:
+        info:
+          version: "1.0"
+          title:
+            Ref: AWS::just-in-time
+        paths:
+          "/api/_userdata":
+            get:
+              responses: {}
+            patch:
+              responses: {}
+            delete:
+              responses: {}
+        openapi: 3.0.1
   JITFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:

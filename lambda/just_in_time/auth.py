@@ -1,4 +1,18 @@
 from json import dumps
+from auth0.v3.authentication.token_verifier import TokenVerifier, AsymmetricSignatureVerifier
+
+domain = 'myaccount.auth0.com'
+client_id = 'exampleid'
+
+# After authenticating
+id_token = auth_result['id_token']
+
+jwks_url = 'https://{}/.well-known/jwks.json'.format(domain)
+issuer = 'https://{}/'.format(domain)
+
+sv = AsymmetricSignatureVerifier(jwks_url)  # Reusable instance
+tv = TokenVerifier(signature_verifier=sv, issuer=issuer, audience=client_id)
+tv.verify(id_token)
 
 
 def check_auth(evt):

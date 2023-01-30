@@ -1,5 +1,5 @@
 import json
-from .auth import check_auth
+import auth
 
 
 def lambda_handler(event, context):
@@ -27,7 +27,7 @@ def lambda_handler(event, context):
     print('Event:', event)
     print('Context:', context)
 
-    print('Check Auth returned:', check_auth(event))
+    print('Check Auth returned:', auth.check_auth(event))
 
     return {
         "statusCode": 200,

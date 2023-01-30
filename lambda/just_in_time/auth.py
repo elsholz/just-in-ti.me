@@ -1,5 +1,5 @@
 from json import dumps
-from auth0.v3.authentication.token_verifier import TokenVerifier, AsymmetricSignatureVerifier
+from auth0.authentication.token_verifier import TokenVerifier, AsymmetricSignatureVerifier
 
 domain = 'myaccount.auth0.com'
 client_id = 'exampleid'

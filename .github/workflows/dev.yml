@@ -15,10 +15,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-central-1
       # sam build
-      - run: pwd
-      - run: cd lambda
-      - run: pwd
       - run: sam build --use-container
+        working-directory: lambda
 
       # Run Unit tests- Specify unit tests here
 

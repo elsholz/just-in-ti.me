@@ -1,7 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: >
-  just-in-time-dev
+Description: just-in-time-dev
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
@@ -10,6 +9,21 @@ Globals:
     MemorySize: 128
 
 Resources:
+  # JITAuthorizerFunction:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     CodeUri: ./authorizer
+  #     Handler: auth.lambda_handler
+  #     Runtime: python3.9
+  # JITAPI:
+  #   Type: AWS::Serverless::Api
+  #   Properties:
+  #     StageName: Dev
+  #     Auth:
+  #       DefaultAuthorizer: Auth
+  #       Authorizers:
+  #         Auth:
+  #           FunctionArn: !GetAtt JITAuthorizerFunction.Arn
   JITFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -40,11 +54,11 @@ Outputs:
   # Find out more about other implicit resources you can reference within SAM
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   JITAPI:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+    Description: "API Gateway endpoint URL for dev stage for JIT function"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/dev/jit/"
   JITFunction:
-    Description: "Hello World Lambda Function ARN"
+    Description: "JIT Function ARN"
     Value: !GetAtt JITFunction.Arn
   JITFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
+    Description: "Implicit IAM Role created for JIT function"
     Value: !GetAtt JITFunctionRole.Arn

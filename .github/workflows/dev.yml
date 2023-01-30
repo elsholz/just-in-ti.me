@@ -22,3 +22,4 @@ jobs:
 
       # sam deploy
       - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name just-in-time --s3-bucket just-in-time-bucket-dev --capabilities CAPABILITY_IAM --region eu-central-1
+        working-directory: lambda

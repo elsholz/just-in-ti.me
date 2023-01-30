@@ -14,10 +14,6 @@ Resources:
     Properties:
       StageName: dev
       DefinitionBody:
-        info:
-          version: "1.0"
-          title:
-            Ref: AWS::just-in-time
         paths:
           "/api/_userdata":
             get:

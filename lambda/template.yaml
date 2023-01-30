@@ -15,15 +15,15 @@ Resources:
   #     CodeUri: ./authorizer
   #     Handler: auth.lambda_handler
   #     Runtime: python3.9
-  # JITAPI:
-  #   Type: AWS::Serverless::Api
-  #   Properties:
-  #     StageName: Dev
-  #     Auth:
-  #       DefaultAuthorizer: Auth
-  #       Authorizers:
-  #         Auth:
-  #           FunctionArn: !GetAtt JITAuthorizerFunction.Arn
+  JITAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Dev
+      # Auth:
+      #   DefaultAuthorizer: Auth
+      #   Authorizers:
+      #     Auth:
+      #       FunctionArn: !GetAtt JITAuthorizerFunction.Arn
   JITFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:

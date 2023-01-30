@@ -2,12 +2,21 @@ from json import dumps
 
 
 def check_auth(evt):
-    print('Call to check auth')
-    print('evt:', evt)
-    try:
-        print(dumps(evt, indent=4))
-    except:
-        pass
+    print('Entered check_auth function')
+    headers = evt.get('headers', {})
+    auth_header = headers.get(
+        'Authorization',
+        headers.get('authorization', None)
+    )
+
+    stage = evt.get('requestContext', {}).get('stage', None)
+    print('Stage:', stage)
+
+    if auth_header:
+        print('Auth Header provided:', auth_header)
+    else:
+        print('No Auth Header provided')
+
     return 'test123'
 
 # from six.moves.urllib.request import urlopen

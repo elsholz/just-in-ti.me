@@ -24,9 +24,6 @@ def lambda_handler(event, context):
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
 
-    print('Event:', event)
-    print('Context:', context)
-
     print('Check Auth returned:', auth.check_auth(event))
 
     return {

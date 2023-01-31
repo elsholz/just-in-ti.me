@@ -19,6 +19,8 @@ get_secret_value_response = client.get_secret_value(
     SecretId=secret_name
 )['SecretString']
 
+print('Secret String:', get_secret_value_response)
+
 DB_USER = get_secret_value_response['DB_USER']
 DB_PASSWORD = get_secret_value_response['DB_PASSWORD']
 

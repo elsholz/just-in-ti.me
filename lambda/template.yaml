@@ -27,10 +27,12 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: just_in_time/
-      Handler: app.lambda_handler
+      Handler: just_in_time.lambda_handler
       Runtime: python3.9
       Architectures:
         - x86_64
+      Policies:
+        - JITKeyAccess
       Events:
         GetUserdata:
           Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api

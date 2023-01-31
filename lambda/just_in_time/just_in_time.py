@@ -17,21 +17,16 @@ client = session.client(
 
 get_secret_value_response = client.get_secret_value(
     SecretId=secret_name
-)
-
-print('Secret Values:', get_secret_value_response)
+)['SecretString']
 
 DB_USER = get_secret_value_response['DB_USER']
 DB_PASSWORD = get_secret_value_response['DB_PASSWORD']
-# if 'SecretString' in get_secret_value_response:
-#     text_secret_data = get_secret_value_response['SecretString']
-# else:
-#     binary_secret_data = get_secret_value_response['SecretBinary']
-
 
 client = MongoClient(
     f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@cluster0.mtoqrjz.mongodb.net/just-in-time"
 )
+
+print(client)
 
 
 def lambda_handler(event, context):

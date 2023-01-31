@@ -15,11 +15,9 @@ client = session.client(
     region_name=region_name,
 )
 
-get_secret_value_response = client.get_secret_value(
+get_secret_value_response = json.loads(client.get_secret_value(
     SecretId=secret_name
-)['SecretString']
-
-print('Secret String:', get_secret_value_response)
+)['SecretString'])
 
 DB_USER = get_secret_value_response['DB_USER']
 DB_PASSWORD = get_secret_value_response['DB_PASSWORD']

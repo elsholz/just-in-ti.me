@@ -52,20 +52,21 @@ def lambda_handler(event, context):
                     year, month, day = data['year'], data['month'], data['day']
                     hours = data['hours']
 
-                    database.userdata_collection.update_one({
-                        "_id": userid,
-                    }, {
-                        "$set": {
-                            f'{year}.{str(month).zfill(2)}.{str(day).zfill(2)}': hours
-                        }
-                        # f'{year}': {
-                        #     f'{month}': {
-                        #         f'{day}': hours
-                        #     }
-                        # }
-                    }, {
-                        "upsert": True
-                    })
+                    database.userdata_collection.update_one(
+                        {
+                            "_id": userid,
+                        }, {
+                            "$set": {
+                                f'{year}.{str(month).zfill(2)}.{str(day).zfill(2)}': hours
+                            }
+                            # f'{year}': {
+                            #     f'{month}': {
+                            #         f'{day}': hours
+                            #     }
+                            # }
+                        },
+                        upsert=True
+                    )
 
                     return {
                         "statusCode": 200,

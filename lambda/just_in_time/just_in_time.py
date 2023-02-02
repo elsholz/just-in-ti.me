@@ -1,68 +1,99 @@
 import json
 import auth
-from pymongo import MongoClient
-
-import boto3
-from botocore.exceptions import ClientError
-
-
-secret_name = "JITKeys"
-region_name = "eu-central-1"
-
-session = boto3.session.Session()
-client = session.client(
-    service_name='secretsmanager',
-    region_name=region_name,
-)
-
-get_secret_value_response = json.loads(client.get_secret_value(
-    SecretId=secret_name
-)['SecretString'])
-
-DB_USER = get_secret_value_response['DB_USER']
-DB_PASSWORD = get_secret_value_response['DB_PASSWORD']
-
-client = MongoClient(
-    f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@cluster0.mtoqrjz.mongodb.net/just-in-time"
-)
-
-print(client)
+import database
+from jsonschema import validate, ValidationError
+import schemas
 
 
 def lambda_handler(event, context):
-    """Sample pure Lambda function
+    try:
+        try:
+            userid = auth.check_auth(event)
+        except Exception as e:
+            return {
+                "statusCode": 401,
+                "body": "Not Authorized"
+            }
 
-    Parameters
-    ----------
-    event: dict, required
-        API Gateway Lambda Proxy Input Format
+        method = event['httpMethod']
 
-        Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+        if method == 'GET':
+            try:
+                userdata = database.userdata_collection.find_one({
+                    '_id': userid
+                })
+            except Exception as e:
+                try:
+                    userdata = {
+                        "_id": userid,
+                        "hours": {}
+                    }
+                    database.userdata_collection.insert_one(userdata)
+                    return {
+                        "statusCode": 200,
+                        "body": json.dumps(userdata, ensure_ascii=False, indent=4),
+                    }
+                except Exception as e:
+                    return {"statusCode": 500, "body": "Internal Server Error"}
+        elif method == 'PATCH':
+            try:
+                data = json.loads(event.get('body', None))
+                try:
+                    validate(instance=data, schema=schemas.patch_request_schema)
 
-    context: object, required
-        Lambda Context runtime methods and attributes
+                    year, month, day = data['year'], data['month'], data['day']
+                    hours = data['hours']
 
-        Context doc: https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html
+                    database.userdata_collection.update_one({
+                        "_id": userid,
+                    }, {
+                        "$set": {
+                            f'{year}.{str(month).zfill(2)}.{str(day).zfill(2)}': hours
+                        }
+                        # f'{year}': {
+                        #     f'{month}': {
+                        #         f'{day}': hours
+                        #     }
+                        # }
+                    }, {
+                        "upsert": True
+                    })
 
-    Returns
-    ------
-    API Gateway Lambda Proxy Output Format: dict
+                    return {
+                        "statusCode": 200,
+                        "body": "OK"
+                    }
+                except ValidationError as e:
+                    return {
+                        "statusCode": 401,
+                        "body": ""
+                    }
+                except Exception as e:
+                    return {
+                        "statusCode": 500,
+                        "body": ""
+                    }
 
-        Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
-    """
+            except:
+                return {
+                    "statusCode": 401,
+                    "body": ""
+                }
 
-    print('Check Auth returned:', auth.check_auth(event))
-    userid = auth.check_auth(event)
+        elif method == 'DELETE':
+            pass
+        else:
+            return {
+                "statusCode": 501,
+                "body": json.dumps({
+                    "message": "Method not implemented",
+                }),
+            }
 
-    db = client['just-in-time']
-    print("Getting Items from DB")
-    for user in db.userdata.find():
-        print(user)
-    print("End Items from DB")
-
-    return {
-        "statusCode": 200,
-        "body": json.dumps({
-            "message": "Ja moin",
-        }),
-    }
+    except Exception:
+        return {
+            "statusCode": 500,
+            "body": json.dumps({
+                "message": "Internal Server Error",
+            }),
+        }

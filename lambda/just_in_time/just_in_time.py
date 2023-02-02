@@ -16,7 +16,7 @@ def lambda_handler(event, context):
                 "body": "Not Authorized"
             }
 
-        method = event['requestContext']['http']["method"]
+        method = event['req']['http']["method"]
 
         if method == 'GET':
             try:
@@ -25,19 +25,22 @@ def lambda_handler(event, context):
                 })
             except Exception as e:
                 print(e)
-                try:
-                    userdata = {
+                return {"statusCode": 500, "body": "Internal Server Error"}
+            try:
+                if not userdata:
+                    userdata = userdata or {
                         "_id": userid,
                         "hours": {}
                     }
                     database.userdata_collection.insert_one(userdata)
-                    return {
-                        "statusCode": 200,
-                        "body": json.dumps(userdata, ensure_ascii=False, indent=4),
-                    }
-                except Exception as e:
-                    print(e)
-                    return {"statusCode": 500, "body": "Internal Server Error"}
+
+                return {
+                    "statusCode": 200,
+                    "body": json.dumps(userdata, ensure_ascii=False, indent=4),
+                }
+            except Exception as e:
+                print(e)
+                return {"statusCode": 500, "body": "Internal Server Error"}
         elif method == 'PATCH':
             try:
                 data = json.loads(event.get('body', None))

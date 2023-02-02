@@ -57,7 +57,7 @@ def lambda_handler(event, context):
                             "_id": userid,
                         }, {
                             "$set": {
-                                f'{year}.{str(month).zfill(2)}.{str(day).zfill(2)}': hours
+                                f'hours.{year}.{str(month).zfill(2)}.{str(day).zfill(2)}': hours
                             }
                             # f'{year}': {
                             #     f'{month}': {

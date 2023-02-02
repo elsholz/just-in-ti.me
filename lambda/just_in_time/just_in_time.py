@@ -10,6 +10,7 @@ def lambda_handler(event, context):
         try:
             userid = auth.check_auth(event)
         except Exception as e:
+            print(e)
             return {
                 "statusCode": 401,
                 "body": "Not Authorized"
@@ -23,6 +24,7 @@ def lambda_handler(event, context):
                     '_id': userid
                 })
             except Exception as e:
+                print(e)
                 try:
                     userdata = {
                         "_id": userid,
@@ -34,6 +36,7 @@ def lambda_handler(event, context):
                         "body": json.dumps(userdata, ensure_ascii=False, indent=4),
                     }
                 except Exception as e:
+                    print(e)
                     return {"statusCode": 500, "body": "Internal Server Error"}
         elif method == 'PATCH':
             try:
@@ -64,17 +67,19 @@ def lambda_handler(event, context):
                         "body": "OK"
                     }
                 except ValidationError as e:
+                    print(e)
                     return {
                         "statusCode": 401,
                         "body": ""
                     }
                 except Exception as e:
+                    print(e)
                     return {
                         "statusCode": 500,
                         "body": ""
                     }
-
-            except:
+            except Exception as e:
+                print(e)
                 return {
                     "statusCode": 401,
                     "body": ""
@@ -83,6 +88,7 @@ def lambda_handler(event, context):
         elif method == 'DELETE':
             pass
         else:
+            print("Invalid Method:", method)
             return {
                 "statusCode": 501,
                 "body": json.dumps({
@@ -90,7 +96,8 @@ def lambda_handler(event, context):
                 }),
             }
 
-    except Exception:
+    except Exception as e:
+        print(e)
         return {
             "statusCode": 500,
             "body": json.dumps({

@@ -16,6 +16,7 @@ def lambda_handler(event, context):
                 "body": "Not Authorized"
             }
 
+        print('EVENT:', event)
         method = event['requestContext']['http']["method"]
 
         if method == 'GET':

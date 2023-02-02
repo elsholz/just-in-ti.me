@@ -3,6 +3,7 @@ import auth
 import database
 from jsonschema import validate, ValidationError
 import schemas
+import base64
 
 
 def lambda_handler(event, context):
@@ -44,7 +45,7 @@ def lambda_handler(event, context):
                 return {"statusCode": 500, "body": "Internal Server Error"}
         elif method == 'PATCH':
             try:
-                data = json.loads(event.get('body', None))
+                data = json.loads(base64.b64decode(event.get('body', None)))
                 try:
                     validate(instance=data, schema=schemas.patch_request_schema)
 

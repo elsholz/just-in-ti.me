@@ -12,17 +12,22 @@ Resources:
   JITAPI:
     Type: AWS::Serverless::HttpApi
     Properties:
+      # ApiId: JITAPI
       StageName: dev
-      DefinitionBody:
-        paths:
-          "/api/_userdata":
-            get:
-              responses: {}
-            patch:
-              responses: {}
-            delete:
-              responses: {}
-        openapi: 3.0.1
+      Name: just_in_time_api
+      Tags:
+        App: just-in-ti.me
+        Environment: dev
+      # DefinitionBody:
+      #   paths:
+      #     "/api/_userdata":
+      #       get:
+      #         responses: {}
+      #       patch:
+      #         responses: {}
+      #       delete:
+      #         responses: {}
+      #   openapi: 3.0.1
   JITFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -47,16 +52,19 @@ Resources:
           Properties:
             Path: /api/_userdata
             Method: get
+            ApiId: JITAPI
         PatchUserdata:
           Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /api/_userdata
             Method: patch
+            ApiId: JITAPI
         DeleteUserdata:
           Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /api/_userdata
             Method: delete
+            ApiId: JITAPI
 
 Outputs:
   # ServerlessHttpApi is an implicit API created out of Events key under Serverless::Function

@@ -8,10 +8,6 @@ Globals:
     Timeout: 3
     MemorySize: 128
 
-Environment:
-  JITAPIID:
-    Ref: JITAPI
-
 Resources:
   JITAPI:
     Type: AWS::Serverless::HttpApi
@@ -45,19 +41,19 @@ Resources:
           Properties:
             Path: /api/_userdata
             Method: get
-            ApiId: JITAPIID
+            ApiId: !Ref JITAPI
         PatchUserdata:
           Type: HttpApi
           Properties:
             Path: /api/_userdata
             Method: patch
-            ApiId: JITAPIID
+            ApiId: !Ref JITAPI
         DeleteUserdata:
           Type: HttpApi
           Properties:
             Path: /api/_userdata
             Method: delete
-            ApiId: JITAPIID
+            ApiId: !Ref JITAPI
 
 Outputs:
   JITAPI:

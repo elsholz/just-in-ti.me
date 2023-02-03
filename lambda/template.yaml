@@ -8,26 +8,19 @@ Globals:
     Timeout: 3
     MemorySize: 128
 
+Environment:
+  JITAPIID:
+    Ref: JITAPI
+
 Resources:
   JITAPI:
     Type: AWS::Serverless::HttpApi
     Properties:
-      # ApiId: JITAPI
       StageName: dev
       Name: just_in_time_api
       Tags:
         App: just-in-ti.me
         Environment: dev
-      # DefinitionBody:
-      #   paths:
-      #     "/api/_userdata":
-      #       get:
-      #         responses: {}
-      #       patch:
-      #         responses: {}
-      #       delete:
-      #         responses: {}
-      #   openapi: 3.0.1
   JITFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
@@ -48,28 +41,25 @@ Resources:
               Resource: "arn:aws:secretsmanager:eu-central-1:891666753558:secret:JITKeys-jnrBoy"
       Events:
         GetUserdata:
-          Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: HttpApi
           Properties:
             Path: /api/_userdata
             Method: get
-            ApiId: JITAPI
+            ApiId: JITAPIID
         PatchUserdata:
-          Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: HttpApi
           Properties:
             Path: /api/_userdata
             Method: patch
-            ApiId: JITAPI
+            ApiId: JITAPIID
         DeleteUserdata:
-          Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Type: HttpApi
           Properties:
             Path: /api/_userdata
             Method: delete
-            ApiId: JITAPI
+            ApiId: JITAPIID
 
 Outputs:
-  # ServerlessHttpApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   JITAPI:
     Description: "API Gateway endpoint URL for dev stage for JIT function"
     Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/dev/jit/"

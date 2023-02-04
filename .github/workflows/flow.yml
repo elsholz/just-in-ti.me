@@ -7,7 +7,8 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
-      - run: 'echo "Environment: $Environment"'
+      - run: 'echo "Environment: $ENVIRONMENT"'
+      - run: 'echo "Branch: $GITHUB_REF"'
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: aws-actions/setup-sam@v1
@@ -18,5 +19,5 @@ jobs:
           aws-region: eu-central-1
       - run: sam build --use-container
         working-directory: lambda
-      - run: sam deploy --config-env $Environment --no-confirm-changeset --no-fail-on-empty-changeset --stack-name just-in-time --s3-bucket just-in-time-bucket-dev --capabilities CAPABILITY_IAM --region eu-central-1
+      - run: sam deploy --config-env $ENVIRONMENT --no-confirm-changeset --no-fail-on-empty-changeset --stack-name just-in-time-$ENVIRONMENT --s3-bucket just-in-time-bucket-$ENVIRONMENT --capabilities CAPABILITY_IAM --region eu-central-1
         working-directory: lambda

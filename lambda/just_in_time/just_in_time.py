@@ -7,6 +7,9 @@ import base64
 
 
 def lambda_handler(event, context):
+    print('Event:', json.dumps(event, indent=4))
+    return {}
+
     try:
         try:
             userid = auth.check_auth(event)
@@ -59,11 +62,6 @@ def lambda_handler(event, context):
                             "$set": {
                                 f'hours.{year}.{str(month).zfill(2)}.{str(day).zfill(2)}': hours
                             }
-                            # f'{year}': {
-                            #     f'{month}': {
-                            #         f'{day}': hours
-                            #     }
-                            # }
                         },
                         upsert=True
                     )

@@ -8,7 +8,7 @@ Globals:
     MemorySize: 128
 
 Resources:
-  JITFunction:
+  JitFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: just_in_time/
@@ -32,20 +32,23 @@ Resources:
           Properties:
             Path: /api/_userdata
             Method: get
-            ApiId: !Ref HttpApi
+            ApiId: !Ref JitApi
         PatchUserdata:
           Type: HttpApi
           Properties:
             Path: /api/_userdata
             Method: patch
-            ApiId: !Ref HttpApi
+            ApiId: !Ref JitApi
         DeleteUserdata:
           Type: HttpApi
           Properties:
             Path: /api/_userdata
             Method: delete
-            ApiId: !Ref HttpApi
-  HttpApi:
+            ApiId: !Ref JitApi
+      Tags:
+        App: just-in-ti.me
+        Environment: dev
+  JitApi:
     Type: AWS::Serverless::HttpApi
     Properties:
       StageName: dev
@@ -54,16 +57,13 @@ Resources:
         App: just-in-ti.me
         Environment: dev
 Outputs:
-  HttpApiId:
-    Description: Api id of HttpApi
+  JitApiId:
+    Description: Api ID of JitApi
     Value:
-      Ref: HttpApi
-  # HttpApi:
-  #   Description: "API Gateway endpoint URL for dev stage for JIT function"
-  #   Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/dev/jit/"
-  JITFunction:
+      Ref: JitApi
+  JitFunction:
     Description: "JIT Function ARN"
-    Value: !GetAtt JITFunction.Arn
-  JITFunctionIamRole:
+    Value: !GetAtt JitFunction.Arn
+  JitFunctionIamRole:
     Description: "Implicit IAM Role created for JIT function"
-    Value: !GetAtt JITFunctionRole.Arn
+    Value: !GetAtt JitFunctionRole.Arn

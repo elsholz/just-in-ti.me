@@ -9,6 +9,8 @@ jobs:
     steps:
       - run: 'echo "Environment: $ENVIRONMENT"'
       - run: 'echo "Branch: $GITHUB_REF"'
+      - run: echo ${{ env.Environment }}
+      - run: echo ${{ env.ENVIRONMENT }}
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: aws-actions/setup-sam@v1

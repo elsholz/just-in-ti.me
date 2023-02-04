@@ -1,6 +1,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: just-in-time-dev
+Description: >
+  Lambda Function and API Gateway for just-in-ti.me.
 
 Globals:
   Function:
@@ -11,11 +12,13 @@ Resources:
   JitFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: JitApiFunction
       CodeUri: just_in_time/
       Handler: just_in_time.lambda_handler
       Runtime: python3.9
       Architectures:
-        - x86_64
+        # - x86_64
+        - arm64
       Policies:
         - Statement:
             - Sid: JITAccessSecretsManager
@@ -30,19 +33,19 @@ Resources:
         GetUserdata:
           Type: HttpApi
           Properties:
-            Path: /api/_userdata
+            Path: /
             Method: get
             ApiId: !Ref JitApi
         PatchUserdata:
           Type: HttpApi
           Properties:
-            Path: /api/_userdata
+            Path: /
             Method: patch
             ApiId: !Ref JitApi
         DeleteUserdata:
           Type: HttpApi
           Properties:
-            Path: /api/_userdata
+            Path: /
             Method: delete
             ApiId: !Ref JitApi
       Tags:

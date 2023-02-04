@@ -2,26 +2,38 @@ from pymongo import MongoClient
 import json
 import boto3
 from botocore.exceptions import ClientError
+import globals
 
 
 secret_name = "JITKeys"
-region_name = "eu-central-1"
 
 session = boto3.session.Session()
 client = session.client(
     service_name='secretsmanager',
-    region_name=region_name,
+    region_name=globals.REGION,
 )
 
-get_secret_value_response = json.loads(client.get_secret_value(
+secret_value = json.loads(client.get_secret_value(
     SecretId=secret_name
 )['SecretString'])
 
-DB_USER = get_secret_value_response['DB_USER']
-DB_PASSWORD = get_secret_value_response['DB_PASSWORD']
+dbs_for_env = {}
 
-client = MongoClient(
-    f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@cluster0.mtoqrjz.mongodb.net/just-in-time"
-)
-db = client['just-in-time']
-userdata_collection = db.userdata
+for env in [globals.PROD, globals.DEV]:
+    DB_USER = secret_value[f'DB_USER_{env}']
+    DB_PASSWORD = secret_value[f'DB_PASSWORD_{env}']
+    DB_ADDRESS = secret_value[f'DB_ADDRESS_{env}']
+    'cluster0.mtoqrjz.mongodb.net'
+
+    client = MongoClient(
+        f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@{DB_ADDRESS}/just-in-time"
+    )
+    db = client['just-in-time']
+    dbs_for_env = {
+        env: db.userdata
+    }
+
+
+def get_userdata_collection(env):
+    assert env in [globals.PROD, globals.DEV]
+    return dbs_for_env[env]

@@ -4,11 +4,19 @@ import database
 from jsonschema import validate, ValidationError
 import schemas
 import base64
+import globals
 
 
 def lambda_handler(event, context):
-    print('Event:', json.dumps(event, indent=4))
-    return {}
+    try:
+        stage = event['requestContext']['stage']
+        assert stage in [globals.DEV, globals.PROD]
+        userdata_collection = database.get_userdata_collection(stage)
+    except Exception as e:
+        return {
+            "statusCode": 400,
+            "body": "Bad Request"
+        }
 
     try:
         try:
@@ -20,12 +28,11 @@ def lambda_handler(event, context):
                 "body": "Not Authorized"
             }
 
-        print('EVENT:', event)
         method = event['requestContext']['http']["method"]
 
         if method == 'GET':
             try:
-                userdata = database.userdata_collection.find_one({
+                userdata = userdata_collection.find_one({
                     '_id': userid
                 })
             except Exception as e:
@@ -37,7 +44,7 @@ def lambda_handler(event, context):
                         "_id": userid,
                         "hours": {}
                     }
-                    database.userdata_collection.insert_one(userdata)
+                    userdata_collection.insert_one(userdata)
 
                 return {
                     "statusCode": 200,
@@ -55,7 +62,7 @@ def lambda_handler(event, context):
                     year, month, day = data['year'], data['month'], data['day']
                     hours = data['hours']
 
-                    database.userdata_collection.update_one(
+                    userdata_collection.update_one(
                         {
                             "_id": userid,
                         }, {

@@ -2,23 +2,14 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: just-in-time-dev
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 3
     MemorySize: 128
 
 Resources:
-  JITAPI:
-    Type: AWS::Serverless::HttpApi
-    Properties:
-      StageName: dev
-      Name: just_in_time_api
-      Tags:
-        App: just-in-ti.me
-        Environment: dev
   JITFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: just_in_time/
       Handler: just_in_time.lambda_handler
@@ -41,24 +32,35 @@ Resources:
           Properties:
             Path: /api/_userdata
             Method: get
-            ApiId: !Ref JITAPI
+            ApiId: !Ref HttpApi
         PatchUserdata:
           Type: HttpApi
           Properties:
             Path: /api/_userdata
             Method: patch
-            ApiId: !Ref JITAPI
+            ApiId: !Ref HttpApi
         DeleteUserdata:
           Type: HttpApi
           Properties:
             Path: /api/_userdata
             Method: delete
-            ApiId: !Ref JITAPI
-
+            ApiId: !Ref HttpApi
+  HttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: dev
+      Name: just_in_time_api
+      Tags:
+        App: just-in-ti.me
+        Environment: dev
 Outputs:
-  JITAPI:
-    Description: "API Gateway endpoint URL for dev stage for JIT function"
-    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/dev/jit/"
+  HttpApiId:
+    Description: Api id of HttpApi
+    Value:
+      Ref: HttpApi
+  # HttpApi:
+  #   Description: "API Gateway endpoint URL for dev stage for JIT function"
+  #   Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/dev/jit/"
   JITFunction:
     Description: "JIT Function ARN"
     Value: !GetAtt JITFunction.Arn

@@ -23,12 +23,13 @@ for env in [globals.PROD, globals.DEV]:
     DB_USER = secret_value[f'DB_USER_{env}']
     DB_PASSWORD = secret_value[f'DB_PASSWORD_{env}']
     DB_ADDRESS = secret_value[f'DB_ADDRESS_{env}']
-    'cluster0.mtoqrjz.mongodb.net'
+    DB_NAME = secret_value[f'DB_NAME_{env}']
+    # 'cluster0.mtoqrjz.mongodb.net'
 
     client = MongoClient(
-        f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@{DB_ADDRESS}/just-in-time"
+        f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@{DB_ADDRESS}/{DB_NAME}?retryWrites=true&w=majority"
     )
-    db = client['just-in-time']
+    db = client[DB_NAME]
     dbs_for_env = {
         env: db.userdata
     }

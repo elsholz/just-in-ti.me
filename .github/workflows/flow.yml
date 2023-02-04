@@ -6,7 +6,17 @@ on:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+    with:
+      env1: ${{ vars.Environment }}
+      env2: ${{ env.Environment }}
+      env3: ${{ vars.ENVIRONMENT}}
+      env4: ${{ env.ENVIRONMENT}}
+
     steps:
+      - run: echo $env1
+      - run: echo $env2
+      - run: echo $env3
+      - run: echo $env5
       - run: 'echo "Environment: ${{ vars.Environment }}"'
       - run: 'echo "Environment: ${{ env.Environment }}"'
       - run: 'echo "Environment: ${{ vars.ENVIRONMENT}}"'

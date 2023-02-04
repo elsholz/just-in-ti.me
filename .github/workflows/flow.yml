@@ -8,9 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: 'echo "Environment: $ENVIRONMENT"'
-      - run: 'echo "Branch: $GITHUB_REF"'
-      - run: echo ${{ env.Environment }}
-      - run: echo ${{ env.ENVIRONMENT }}
+        with:
+          ENVIRONMENT: ${{vars.Environment}}
+      - run: 'echo "Environment: $ENVIRONMENT"'
+        with:
+          ENVIRONMENT: ${{vars.ENVIRONMENT}}
+      - run: 'echo "Environment: $ENVIRONMENT"'
+        with:
+          ENVIRONMENT: ${{env.Environment}}
+      - run: 'echo "Environment: $ENVIRONMENT"'
+        with:
+          ENVIRONMENT: ${{env.ENVIRONMENT}}
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: aws-actions/setup-sam@v1

@@ -21,5 +21,5 @@ jobs:
           python-version: "3.9"
       - run: sam build
         working-directory: lambda
-      - run: sam deploy --config-env dev --no-confirm-changeset --no-fail-on-empty-changeset --stack-name just-in-time-dev --s3-bucket just-in-time-bucket-dev --capabilities CAPABILITY_IAM --region eu-central-1
+      - run: sam deploy --parameter-overrides Env=dev --no-confirm-changeset --no-fail-on-empty-changeset --stack-name just-in-time-dev --s3-bucket just-in-time-bucket-dev --capabilities CAPABILITY_IAM --region eu-central-1
         working-directory: lambda

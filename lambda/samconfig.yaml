@@ -1,7 +1,0 @@
-version = 0.1
-
-[prod.deploy.parameters]
-parameter_overrides = "Environment=prod"
-
-[dev.deploy.parameters]
-parameter_overrides = "Environment=dev"

@@ -8,11 +8,16 @@ Globals:
     Timeout: 3
     MemorySize: 128
 
+Parameters:
+  Env:
+    Type: String
+    Description: Environment of the deployment
+
 Resources:
   JitFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: JitApiFunction
+      FunctionName: !Sub "JitApiFunction${Env}"
       CodeUri: just_in_time/
       Handler: just_in_time.lambda_handler
       Runtime: python3.9

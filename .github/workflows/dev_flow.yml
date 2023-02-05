@@ -20,5 +20,5 @@ jobs:
           aws-region: eu-central-1
       - run: sam build
         working-directory: lambda
-      - run: sam deploy --parameter-overrides env=dev --no-confirm-changeset --no-fail-on-empty-changeset --stack-name just-in-time-dev --s3-bucket just-in-time-bucket-dev --capabilities CAPABILITY_IAM --region eu-central-1
+      - run: sam deploy --parameter-overrides env=dev Domain=api.dev.just-in-ti.me --no-confirm-changeset --no-fail-on-empty-changeset --stack-name just-in-time-dev --s3-bucket just-in-time-bucket-dev --capabilities CAPABILITY_IAM --region eu-central-1
         working-directory: lambda

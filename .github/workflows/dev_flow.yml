@@ -36,7 +36,6 @@ jobs:
         working-directory: q-frontend
       - name: Install Quasar
         run: npm i -g @quasar/cli
-      - run: which quasar
       - name: Build PWA
         run: npx quasar build
         working-directory: q-frontend
@@ -53,6 +52,9 @@ jobs:
       - name: Build SAM Template
         run: sam build
         working-directory: q-frontend
-      - name: Deploy Frontend in S3 Bucket
+      - name: Create S3 Bucket
         run: sam deploy --parameter-overrides env=dev --no-confirm-changeset --no-fail-on-empty-changeset --stack-name just-in-time-frontend-dev --s3-bucket conf-bucket-jit --capabilities CAPABILITY_IAM --region eu-central-1
+        working-directory: q-frontend
+      - name: Sync Files to Bucket
+        run: aws s3 sync ./dist/pwa/* s3://JitFrontendDev
         working-directory: q-frontend

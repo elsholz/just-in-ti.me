@@ -12,24 +12,22 @@ Mappings:
   EnvMap:
     prod:
       BucketName: "JitFrontendProd"
+      Domain: "just-in-ti.me"
     dev:
       BucketName: "JitFrontendDev"
+      Domain: "dev.just-in-ti.me"
 
 Parameters:
   env:
     Type: String
     Description: Environment of the deployment (Lowercase)
-  Domain:
-    Type: String
-    Description: Base Domain for API Gateway of the deployment
-    Default: just-in-ti.me
 
 Resources:
   JitBucket:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: PublicRead
-      BucketName: !Ref Domain # !FindInMap [EnvMap, !Ref env, BucketName]
+      BucketName: !FindInMap [EnvMap, !Ref env, BucketName]
       # PublicAccessBlockConfiguration:
       #   BlockPublicAcls: false
       #   BlockPublicPolicy: false
@@ -63,21 +61,20 @@ Resources:
   JitDNSEntry:
     Type: AWS::Route53::RecordSetGroup
     Properties:
-      HostedZoneName: !Ref Domain
+      HostedZoneName: !FindInMap [EnvMap, !Ref env, Domain]
       #  !Sub
       #    - ${Domain}.
       #    - Domain: !Ref Domain
       Comment: Zone apex alias.
       RecordSets:
-        - Name: !Ref Domain
+        - Name: !FindInMap [EnvMap, !Ref env, Domain]
           Type: A
           AliasTarget:
             HostedZoneId: "Z0300930209VNAOS1X0XR"
             DNSName: "s3-website-eu-central-1.amazonaws.com"
-        - Name: !Ref Domain
-          #  !Sub
-          #      - www.${Domain}
-          #      - Domain: !Ref RootDomainName
+        - Name: !Sub
+            - www.${Do}
+            - Do: !FindInMap [EnvMap, !Ref env, Domain]
           Type: CNAME
           TTL: 900
           ResourceRecords:

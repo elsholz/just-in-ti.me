@@ -73,7 +73,9 @@ Resources:
           Type: A
           AliasTarget:
             HostedZoneId: "Z21DNDUVLTQW6Q"
-            DNSName: !Sub "${BucketName}.s3-website-eu-central-1.amazonaws.com"
+            DNSName: !Sub
+              - "${BucketName}.s3-website-eu-central-1.amazonaws.com"
+              - BucketName: !FindInMap [EnvMap, !Ref env, BucketName]
         # - Name: !Sub
         #     - www.${Do}
         #     - Do: !FindInMap [EnvMap, !Ref env, Domain]

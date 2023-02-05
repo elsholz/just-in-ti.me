@@ -32,8 +32,11 @@ jobs:
         with:
           node-version: 18.x
       - name: Install NPM Dependencies
-        run: npm i -g
+        run: npm i
         working-directory: q-frontend
+      - name: Install Quasar
+        run: npm i -g @quasar/cli
+      - run: which quasar
       - name: Build PWA
         run: npx quasar build
         working-directory: q-frontend

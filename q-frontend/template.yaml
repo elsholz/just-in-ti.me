@@ -73,14 +73,14 @@ Resources:
           Type: A
           AliasTarget:
             HostedZoneId: "Z21DNDUVLTQW6Q"
-            DNSName: "s3-website-eu-central-1.amazonaws.com"
-        - Name: !Sub
-            - www.${Do}
-            - Do: !FindInMap [EnvMap, !Ref env, Domain]
-          Type: CNAME
-          TTL: 900
-          ResourceRecords:
-            - !GetAtt JitBucket.DomainName
+            DNSName: !Sub "${BucketName}.s3-website-eu-central-1.amazonaws.com"
+        # - Name: !Sub
+        #     - www.${Do}
+        #     - Do: !FindInMap [EnvMap, !Ref env, Domain]
+        #   Type: CNAME
+        #   TTL: 900
+        #   ResourceRecords:
+        #     - !GetAtt JitBucket.DomainName
 
 Outputs:
   WebsiteURL:

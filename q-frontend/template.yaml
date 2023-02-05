@@ -1,0 +1,89 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  S3 bucket for Frontend Deployment
+
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+
+Mappings:
+  EnvMap:
+    prod:
+      BucketName: "JitFrontendProd"
+    dev:
+      BucketName: "JitFrontendDev"
+
+Parameters:
+  env:
+    Type: String
+    Description: Environment of the deployment (Lowercase)
+  Domain:
+    Type: String
+    Description: Base Domain for API Gateway of the deployment
+    Default: api.just-in-ti.me
+
+Resources:
+  JitBucket:
+    Type: AWS::Serverless::S3Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: !Ref Domain # !FindInMap [EnvMap, !Ref env, BucketName]
+      # PublicAccessBlockConfiguration:
+      #   BlockPublicAcls: false
+      #   BlockPublicPolicy: false
+      #   IgnorePublicAcls: false
+      #   RestrictPublicBuckets: false
+      Tags:
+        - App: just-in-ti.me
+        - Environment: !Ref env
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        # RedirectAllRequestsTo: index.html
+
+  BucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      PolicyDocument:
+        Id: JitPublicReadPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Join
+              - ""
+              - - "arn:aws:s3:::"
+                - !Ref JitBucket
+                - /*
+      Bucket: !Ref JitBucket
+
+    JitDNSEntry:
+      Type: AWS::Route53::RecordSetGroup
+      Properties:
+        HostedZoneName: !Ref Domain
+        #  !Sub
+        #    - ${Domain}.
+        #    - Domain: !Ref Domain
+        Comment: Zone apex alias.
+        RecordSets:
+          - Name: !Ref Domain
+            Type: A
+            AliasTarget:
+              HostedZoneId: "Z0300930209VNAOS1X0XR"
+              DNSName: "s3-website-eu-central-1.amazonaws.com"
+          - Name: !Ref Domain
+            #  !Sub
+            #      - www.${Domain}
+            #      - Domain: !Ref RootDomainName
+            Type: CNAME
+            TTL: 900
+            ResourceRecords:
+              - !GetAtt JitBucket.DomainName
+
+Outputs:
+  WebsiteURL:
+    Value: !GetAtt JitBucket.WebsiteURL
+    Description: URL for website hosted on S3

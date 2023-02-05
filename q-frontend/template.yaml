@@ -72,7 +72,7 @@ Resources:
         - Name: !FindInMap [EnvMap, !Ref env, Domain]
           Type: A
           AliasTarget:
-            HostedZoneId: "Z0300930209VNAOS1X0XR"
+            HostedZoneId: "Z21DNDUVLTQW6Q"
             DNSName: "s3-website-eu-central-1.amazonaws.com"
         - Name: !Sub
             - www.${Do}

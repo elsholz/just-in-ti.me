@@ -9,9 +9,16 @@ Globals:
     MemorySize: 128
 
 Parameters:
+  env:
+    Type: String
+    Description: Environment of the deployment (Lowercase)
   Env:
     Type: String
     Description: Environment of the deployment
+  Domain:
+    Type: String
+    Description: Base Domain for API Gateway of the deployment
+    Default: api.just-in-ti.me
 
 Resources:
   JitFunction:
@@ -55,15 +62,19 @@ Resources:
             ApiId: !Ref JitApi
       Tags:
         App: just-in-ti.me
-        Environment: dev
+        Environment: !Ref env
   JitApi:
     Type: AWS::Serverless::HttpApi
     Properties:
-      StageName: dev
+      StageName: !Ref env
       Name: just_in_time_api
+      Domain:
+        Type: AWS::Serverless::HttpApiDomainConfiguration
+        Properties:
+          DomainName: !Ref Domain
       Tags:
         App: just-in-ti.me
-        Environment: dev
+        Environment: !Ref env
 Outputs:
   JitApiId:
     Description: Api ID of JitApi

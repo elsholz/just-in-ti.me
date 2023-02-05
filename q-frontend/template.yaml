@@ -26,7 +26,7 @@ Parameters:
 
 Resources:
   JitBucket:
-    Type: AWS::Serverless::S3Bucket
+    Type: AWS::S3::Bucket
     Properties:
       AccessControl: PublicRead
       BucketName: !Ref Domain # !FindInMap [EnvMap, !Ref env, BucketName]

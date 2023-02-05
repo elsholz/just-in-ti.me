@@ -72,7 +72,7 @@ Resources:
         DomainName: !Ref Domain
         CertificateArn: "arn:aws:acm:eu-central-1:891666753558:certificate/1552d28f-f059-4af0-942e-c2b5022dc828"
         Route53:
-          HostedZoneName: just-in-ti.me
+          HostedZoneId: "Z0300930209VNAOS1X0XR"
       Tags:
         App: just-in-ti.me
         Environment: !Ref env

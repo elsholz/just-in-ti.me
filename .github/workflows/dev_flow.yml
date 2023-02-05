@@ -33,12 +33,7 @@ jobs:
           node-version: 16
       - name: Install NPM Dependencies
         working-directory: q-frontend
-        run: npm i -g
-      - run: npm list
-        working-directory: q-frontend
-      - name: Build Quasar Frontend
-        run: quasar build
-        working-directory: q-frontend
+        run: npm i -g ; quasar build
       - name: Setup Python
         uses: actions/setup-python@v4.5.0
         with:

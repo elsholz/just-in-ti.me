@@ -71,8 +71,8 @@ Resources:
       Domain:
         Type: AWS::Serverless::HttpApiDomainConfiguration
         Properties:
+          CertificateArn: "arn:aws:acm:eu-central-1:891666753558:certificate/1552d28f-f059-4af0-942e-c2b5022dc828"
           DomainName: !Ref Domain
-          CertificateArn: arn:aws:acm:eu-central-1:891666753558:certificate/1552d28f-f059-4af0-942e-c2b5022dc828
       Tags:
         App: just-in-ti.me
         Environment: !Ref env

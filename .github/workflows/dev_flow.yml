@@ -33,6 +33,7 @@ jobs:
       - name: Install NPM Dependencies
         working-directory: q-frontend
         run: npm i -g
+      - run: npm list
       - name: Build Quasar Frontend
         run: quasar build
         working-directory: q-frontend

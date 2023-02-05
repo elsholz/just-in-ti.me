@@ -8,6 +8,19 @@ Globals:
     Timeout: 3
     MemorySize: 128
 
+Mappings:
+  EnvMap:
+    prod:
+      CertificateArn: "arn:aws:acm:eu-central-1:891666753558:certificate/1552d28f-f059-4af0-942e-c2b5022dc828"
+      Domain: "api.just-in-ti.me"
+      FunctionName: "JitFunctionProd"
+      ApiName: "JitApiProd"
+    dev:
+      CertificateArn: "arn:aws:acm:eu-central-1:891666753558:certificate/dde08a63-1bf1-49fa-8e12-c55df088cce2"
+      Domain: "api.dev.just-in-ti.me"
+      FunctionName: "JitFunctionDev"
+      ApiName: "JitApiDev"
+
 Parameters:
   env:
     Type: String
@@ -21,7 +34,7 @@ Resources:
   JitFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub "JitApiFunction-${env}"
+      FunctionName: !FindInMap [EnvMap, !Ref env, FunctionName]
       CodeUri: just_in_time/
       Handler: just_in_time.lambda_handler
       Runtime: python3.9
@@ -64,10 +77,10 @@ Resources:
     Type: AWS::Serverless::HttpApi
     Properties:
       StageName: !Ref env
-      Name: !Sub "just_in_time_api_${env}"
+      Name: !FindInMap [EnvMap, !Ref env, ApiName]
       Domain:
-        DomainName: !Ref Domain
-        CertificateArn: "arn:aws:acm:eu-central-1:891666753558:certificate/1552d28f-f059-4af0-942e-c2b5022dc828"
+        DomainName: !FindInMap [EnvMap, !Ref env, Domain]
+        CertificateArn: !FindInMap [EnvMap, !Ref env, CertificateArn]
         Route53:
           HostedZoneId: "Z0300930209VNAOS1X0XR"
       Tags:

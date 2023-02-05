@@ -32,7 +32,7 @@ jobs:
           node-version: 16
       - name: Install NPM Dependencies
         working-directory: q-frontend
-        run: npm i
+        run: npm i -g
       - name: Build Quasar Frontend
         run: quasar build
         working-directory: q-frontend

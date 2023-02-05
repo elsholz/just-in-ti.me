@@ -60,29 +60,26 @@ Resources:
                 - /*
       Bucket: !Ref JitBucket
 
-  JitDNSEntry:
-    Type: AWS::Route53::RecordSetGroup
-    Properties:
-      HostedZoneName: "just-in-ti.me."
-      #  !Sub
-      #    - ${Domain}.
-      #    - Domain: !Ref Domain
-      Comment: Zone apex alias.
-      RecordSets:
-        - Name: !FindInMap [EnvMap, !Ref env, Domain]
-          Type: A
-          AliasTarget:
-            HostedZoneId: "Z21DNDUVLTQW6Q"
-            DNSName: !Sub
-              - "${BucketName}.s3-website-eu-central-1.amazonaws.com"
-              - BucketName: !FindInMap [EnvMap, !Ref env, BucketName]
-        # - Name: !Sub
-        #     - www.${Do}
-        #     - Do: !FindInMap [EnvMap, !Ref env, Domain]
-        #   Type: CNAME
-        #   TTL: 900
-        #   ResourceRecords:
-        #     - !GetAtt JitBucket.DomainName
+  # JitDNSEntry:
+  #   Type: AWS::Route53::RecordSetGroup
+  #   Properties:
+  #     HostedZoneName: "just-in-ti.me."
+  #     Comment: Zone apex alias.
+  #     RecordSets:
+  #       - Name: !FindInMap [EnvMap, !Ref env, Domain]
+  #         Type: A
+  #         AliasTarget:
+  #           HostedZoneId: "Z21DNDUVLTQW6Q"
+  #           DNSName: !Sub
+  #             - "${BucketName}.s3-website-eu-central-1.amazonaws.com"
+  #             - BucketName: !FindInMap [EnvMap, !Ref env, BucketName]
+  #       # - Name: !Sub
+  #       #     - www.${Do}
+  #       #     - Do: !FindInMap [EnvMap, !Ref env, Domain]
+  #       #   Type: CNAME
+  #       #   TTL: 900
+  #       #   ResourceRecords:
+  #       #     - !GetAtt JitBucket.DomainName
 
 Outputs:
   WebsiteURL:

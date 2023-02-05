@@ -32,12 +32,15 @@ jobs:
         with:
           node-version: 16
       - name: Install NPM Dependencies
+        run: npm i -g
         working-directory: q-frontend
-        run: npm i -g ; quasar build
-      - name: Setup Python
-        uses: actions/setup-python@v4.5.0
-        with:
-          python-version: "3.9"
+      - name: Build PWA
+        run: npx quasar build
+        working-directory: q-frontend
+      # - name: Setup Python
+      #   uses: actions/setup-python@v4.5.0
+      #   with:
+      #     python-version: "3.9"
       - uses: aws-actions/setup-sam@v1
       - uses: aws-actions/configure-aws-credentials@v1
         with:

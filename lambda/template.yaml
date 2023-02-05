@@ -12,9 +12,6 @@ Parameters:
   env:
     Type: String
     Description: Environment of the deployment (Lowercase)
-  Env:
-    Type: String
-    Description: Environment of the deployment
   Domain:
     Type: String
     Description: Base Domain for API Gateway of the deployment
@@ -24,7 +21,7 @@ Resources:
   JitFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub "JitApiFunction${Env}"
+      FunctionName: !Sub "JitApiFunction-${env}"
       CodeUri: just_in_time/
       Handler: just_in_time.lambda_handler
       Runtime: python3.9

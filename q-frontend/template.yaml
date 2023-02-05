@@ -34,8 +34,10 @@ Resources:
       #   IgnorePublicAcls: false
       #   RestrictPublicBuckets: false
       Tags:
-        App: just-in-ti.me
-        Environment: !Ref env
+        - Key: App
+          Value: just-in-ti.me
+        - Key: Environment
+          Value: !Ref env
       WebsiteConfiguration:
         IndexDocument: index.html
         # RedirectAllRequestsTo: index.html

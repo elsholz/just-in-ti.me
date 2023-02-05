@@ -11,10 +11,10 @@ Globals:
 Mappings:
   EnvMap:
     prod:
-      BucketName: "JitFrontendProd"
+      BucketName: "jit-frontend-prod"
       Domain: "just-in-ti.me"
     dev:
-      BucketName: "JitFrontendDev"
+      BucketName: "jit-frontend-dev"
       Domain: "dev.just-in-ti.me"
 
 Parameters:

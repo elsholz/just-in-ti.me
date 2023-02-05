@@ -20,7 +20,7 @@ jobs:
           aws-region: eu-central-1
       - run: sam build
         working-directory: lambda
-      - run: sam deploy --parameter-overrides env=dev --no-confirm-changeset --no-fail-on-empty-changeset --stack-name just-in-time-api-dev --s3-bucket conf-bucket-jit-api-dev --capabilities CAPABILITY_IAM --region eu-central-1
+      - run: sam deploy --parameter-overrides env=dev --no-confirm-changeset --no-fail-on-empty-changeset --stack-name just-in-time-api-dev --s3-bucket conf-bucket-jit --capabilities CAPABILITY_IAM --region eu-central-1
         working-directory: lambda
 
   deploy_dev_frontend:
@@ -48,5 +48,5 @@ jobs:
         run: sam build
         working-directory: q-frontend
       - name: Deploy Frontend in S3 Bucket
-        run: sam deploy --parameter-overrides env=dev --no-confirm-changeset --no-fail-on-empty-changeset --stack-name just-in-time-frontend-dev --s3-bucket conf-bucket-jit-frontend-dev --capabilities CAPABILITY_IAM --region eu-central-1
+        run: sam deploy --parameter-overrides env=dev --no-confirm-changeset --no-fail-on-empty-changeset --stack-name just-in-time-frontend-dev --s3-bucket conf-bucket-jit --capabilities CAPABILITY_IAM --region eu-central-1
         working-directory: q-frontend

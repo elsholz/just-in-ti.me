@@ -63,7 +63,7 @@ Resources:
   JitDNSEntry:
     Type: AWS::Route53::RecordSetGroup
     Properties:
-      HostedZoneName: "just-in-ti.me"
+      HostedZoneName: "just-in-ti.me."
       #  !Sub
       #    - ${Domain}.
       #    - Domain: !Ref Domain
